@@ -5,6 +5,32 @@ const typeNewExpense = document.querySelector("#category")
 const newExpenseAmount = document.querySelector("#amount")
 const form = document.querySelector("form")
 const totalExpenses = document.querySelector("#expenses-total")
+let totalAmount = document.querySelector("span#total-amount")
+
+// Formatação do Input Amount
+newExpenseAmount.oninput = () => {
+    // Pega o que foi digitado e substitui por nada
+    let value = newExpenseAmount.value.replace(/\D/g, "")
+
+    // Transforma em centavos
+    value = Number(value) / 100
+
+    // Atualiza o valor
+    newExpenseAmount.value = formatCurrencyBRL(value)
+}
+
+// Função para formatar a moeda
+function formatCurrencyBRL(value){
+
+    // Formata o valor para BRL
+    value = value.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+    })
+
+    // Retorna esse valor para o bloco acima
+    return value
+}
 
 // Resgatando os valores do formulario.
 form.addEventListener("submit", (event) =>{
@@ -25,20 +51,15 @@ form.addEventListener("submit", (event) =>{
 
     // Adição de imagem com base no tipo
     switch(typeNewExpense.value){
-        case "Alimentação":
-            expenseIcon.src = "./img/food.svg"
+        case "Alimentação": expenseIcon.src = "./img/food.svg"
             break
-        case "Hospedagem":
-            expenseIcon.src = "./img/accommodation.svg"
+        case "Hospedagem": expenseIcon.src = "./img/accommodation.svg"
             break
-        case "Transporte":
-            expenseIcon.src = "./img/transport.svg"
+        case "Transporte": expenseIcon.src = "./img/transport.svg"
             break
-        case "Serviços":
-            expenseIcon.src = "./img/services.svg"
+        case "Serviços": expenseIcon.src = "./img/services.svg"
             break
-        case "Outros":
-            expenseIcon.src = "./img/others.svg"
+        case "Outros": expenseIcon.src = "./img/others.svg"
             break
     }
 
@@ -47,7 +68,6 @@ form.addEventListener("submit", (event) =>{
     expenseInfo.classList.add("expense-info")
     expenseAmount.classList.add("expense-amount")
     expenseDelete.classList.add("remove-icon")
-
     
     // Juntando os elementos.
 
@@ -56,8 +76,7 @@ form.addEventListener("submit", (event) =>{
     expenseType.append(typeNewExpense.value)
 
     // Adiciona o valor dentro do span que recebe o preço em reais.
-    expenseAmountSmall.append("R$")
-    expenseAmount.append(expenseAmountSmall, newExpenseAmount.value)
+    expenseAmount.append(newExpenseAmount.value)
 
     // Agrupa os elementos name e type em uma div.
     expenseInfo.append(expenseName, expenseType)
@@ -66,7 +85,7 @@ form.addEventListener("submit", (event) =>{
     newExpenseItem.append(expenseIcon, expenseInfo, expenseAmount, expenseDelete)
     expenses.prepend(newExpenseItem)
 
-    // Limpando os Inputs
+    // Limpando os Inputs.
     newExpenseAmount.value = ""
     newExpense.value = ""
     typeNewExpense.value = ""
@@ -84,3 +103,5 @@ expenses.addEventListener("click", (event) => {
         totalExpenses.textContent = document.querySelectorAll('li').length + " Despesas"
     }
 });
+
+
